@@ -1,0 +1,523 @@
+/* ==========================================================================
+   VELTRIX TECH — HIGH-END KINETIC DARK SYSTEM
+   Exact aesthetic & scroll effects inspired by chamathdilshan.com
+   ========================================================================== */
+
+:root {
+  --bg-primary: #000000;
+  --bg-secondary: #050505;
+  --bg-card: #08080a;
+  --bg-card-hover: #0e0e12;
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-medium: rgba(255, 255, 255, 0.16);
+  --border-strong: rgba(255, 255, 255, 0.28);
+  --text-white: #f5f5f5;
+  --text-secondary: rgba(255, 255, 255, 0.72);
+  --text-muted: rgba(255, 255, 255, 0.5);
+  --text-dim: rgba(255, 255, 255, 0.32);
+  --accent-emerald: #10b981;
+  --hero-duration: 0.9s;
+  --hero-ease: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+img {
+  max-width: 100%;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-family: 'Geist', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background-color: var(--bg-primary);
+  color: var(--text-white);
+}
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-white);
+  overflow-x: clip;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::selection {
+  background-color: #ffffff;
+  color: #000000;
+}
+
+/* Container */
+.container {
+  width: 100%;
+  max-width: 1240px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 16px;
+  padding-right: 16px;
+}
+
+@media (min-width: 640px) {
+  .container {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container {
+    padding-left: 32px;
+    padding-right: 32px;
+  }
+}
+
+/* Background Grids & Ambient Lights */
+.bg-grid {
+  background-size: 52px 52px;
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+}
+
+.ambient-glow {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 1100px;
+  height: 600px;
+  background: radial-gradient(ellipse 60% 40% at 50% 0%, rgba(255, 255, 255, 0.07), transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ==========================================================================
+   SCROLL REVEAL & KINETIC ANIMATIONS (chamathdilshan.com style)
+   ========================================================================== */
+
+/* Wordmark Kinetic Rising on Page Load */
+@keyframes letter-rise {
+  0% {
+    transform: translateY(115%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.wordmark-letter {
+  display: inline-block;
+  animation: letter-rise var(--hero-duration) var(--hero-ease) both;
+  animation-delay: calc(0.2s + var(--i, 0) * 80ms);
+  will-change: transform, opacity;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), color 0.3s ease;
+}
+
+.wordmark-letter:hover {
+  transform: translateY(-12px) scale(1.04);
+  color: #a1a1aa;
+}
+
+/* Scroll Reveal: Fade in + Slide Up on Viewport Entry */
+.reveal-on-scroll, [data-reveal] {
+  opacity: 0;
+  transform: translateY(32px);
+  filter: blur(4px);
+  transition: opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1), 
+              transform 0.75s cubic-bezier(0.16, 1, 0.3, 1), 
+              filter 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform, filter;
+}
+
+.reveal-on-scroll.is-revealed, [data-reveal].is-revealed {
+  opacity: 1;
+  transform: translateY(0);
+  filter: blur(0);
+}
+
+/* Stagger Delays for Grid Children */
+.reveal-delay-1 { transition-delay: 80ms !important; }
+.reveal-delay-2 { transition-delay: 160ms !important; }
+.reveal-delay-3 { transition-delay: 240ms !important; }
+.reveal-delay-4 { transition-delay: 320ms !important; }
+.reveal-delay-5 { transition-delay: 400ms !important; }
+.reveal-delay-6 { transition-delay: 480ms !important; }
+
+/* Chamath Dilshan Signature Card Stack-Rise Animation */
+@keyframes stack-rise {
+  0% {
+    transform: translateY(28px) scale(0.94);
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+
+.stack-rise {
+  transform-origin: 50% 0;
+  will-change: transform, scale, opacity;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease, filter 0.35s ease;
+}
+
+@supports (animation-timeline: view()) {
+  .stack-rise {
+    animation: linear both stack-rise;
+    animation-timeline: view();
+    animation-range: entry cover 35%;
+  }
+}
+
+/* Sticky Pill Navbar */
+.nav-dock {
+  background: rgba(6, 6, 8, 0.75);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.8);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.nav-dock.scrolled {
+  background: rgba(4, 4, 6, 0.9);
+  border-color: rgba(255, 255, 255, 0.14);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.95);
+}
+
+/* Scroll Progress Bar at very top */
+.scroll-progress-line {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #10b981 0%, #ffffff 100%);
+  z-index: 100;
+  transition: width 0.1s ease-out;
+  pointer-events: none;
+}
+
+/* Cards & Spotlight */
+.veltrix-card {
+  position: relative;
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: 14px;
+  transition: border-color 0.3s ease, transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+}
+
+.veltrix-card:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--border-medium);
+  transform: translateY(-3px);
+  box-shadow: 0 24px 48px -20px rgba(0, 0, 0, 0.85), 0 0 30px -12px rgba(255, 255, 255, 0.04);
+}
+
+/* Corner Crosshair Marks (+) */
+.cross-mark {
+  position: absolute;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  line-height: 1;
+  color: rgba(255, 255, 255, 0.28);
+  pointer-events: none;
+  user-select: none;
+  transition: color 0.3s ease, transform 0.3s ease;
+  z-index: 3;
+}
+
+.veltrix-card:hover .cross-mark {
+  color: rgba(255, 255, 255, 0.7);
+  transform: scale(1.15);
+}
+
+.cross-tl { top: -6px; left: -6px; }
+.cross-tr { top: -6px; right: -6px; }
+.cross-bl { bottom: -6px; left: -6px; }
+.cross-br { bottom: -6px; right: -6px; }
+
+/* Buttons */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: #ffffff;
+  color: #000000;
+  font-weight: 600;
+  font-size: 14px;
+  padding: 10px 22px;
+  border-radius: 9999px;
+  border: 1px solid #ffffff;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  white-space: nowrap;
+}
+
+.btn-primary:hover {
+  background: #e4e4e7;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(255, 255, 255, 0.2);
+}
+
+.btn-primary:active {
+  transform: scale(0.97);
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.04);
+  color: #ffffff;
+  font-weight: 500;
+  font-size: 14px;
+  padding: 10px 22px;
+  border-radius: 9999px;
+  border: 1px solid var(--border-subtle);
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  white-space: nowrap;
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: var(--border-medium);
+  transform: translateY(-2px);
+}
+
+.btn-secondary:active {
+  transform: scale(0.97);
+}
+
+/* Section Tag Monospace */
+.section-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  padding: 5px 14px;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border-subtle);
+  width: fit-content;
+}
+
+/* Fluid Hero Wordmark */
+.hero-wordmark {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  font-size: clamp(3rem, 15vw, 13rem);
+  font-weight: 900;
+  line-height: 0.82;
+  letter-spacing: -0.04em;
+  color: #ffffff;
+  user-select: none;
+  overflow: hidden;
+}
+
+/* Infinite Marquee */
+@keyframes marquee-scroll {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(-50%); }
+}
+
+.marquee-container {
+  overflow: hidden;
+  width: 100%;
+  mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
+}
+
+.marquee-track {
+  display: flex;
+  width: max-content;
+  gap: 16px;
+  animation: marquee-scroll 45s linear infinite;
+}
+
+.marquee-track:hover {
+  animation-play-state: paused;
+}
+
+/* Live Pulse Animation */
+@keyframes pulse-ring {
+  0% { transform: scale(0.95); opacity: 0.8; }
+  50% { transform: scale(1.35); opacity: 0.25; }
+  100% { transform: scale(0.95); opacity: 0.8; }
+}
+
+.pulse-dot {
+  position: relative;
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  background-color: var(--accent-emerald);
+  border-radius: 50%;
+}
+
+.pulse-dot::after {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  border-radius: 50%;
+  background-color: var(--accent-emerald);
+  animation: pulse-ring 2s infinite ease-in-out;
+  pointer-events: none;
+}
+
+/* Modal Overlay */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  overflow-y: auto;
+  animation: modal-fade 0.2s ease-out;
+}
+
+@keyframes modal-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.modal-content {
+  background: #09090c;
+  border: 1px solid var(--border-medium);
+  border-radius: 20px;
+  width: 100%;
+  max-width: 780px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.9);
+  position: relative;
+  animation: modal-scale 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes modal-scale {
+  from { transform: scale(0.95) translateY(10px); }
+  to { transform: scale(1) translateY(0); }
+}
+
+@media (max-width: 640px) {
+  .modal-backdrop {
+    padding: 12px;
+  }
+  .modal-content {
+    padding: 24px 18px !important;
+    border-radius: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .btn-primary, .btn-secondary {
+    white-space: normal;
+    text-align: center;
+  }
+  .hero-wordmark {
+    font-size: clamp(2.2rem, 12.5vw, 13rem);
+  }
+  .title-hero {
+    font-size: clamp(1.85rem, 7.5vw, 2.5rem);
+    word-break: break-word;
+  }
+  .title-section {
+    font-size: clamp(1.65rem, 6.5vw, 2.2rem);
+    word-break: break-word;
+  }
+  .text-lead {
+    font-size: 15px;
+  }
+}
+
+/* Forms */
+.veltrix-input {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border-subtle);
+  border-radius: 10px;
+  padding: 12px 16px;
+  color: #ffffff;
+  font-size: 14px;
+  font-family: inherit;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.veltrix-input:focus {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.35);
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.05);
+}
+
+.veltrix-input::placeholder {
+  color: var(--text-dim);
+}
+
+/* Typography Helpers */
+.title-hero {
+  font-size: clamp(2rem, 5vw, 4.2rem);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.035em;
+  color: #ffffff;
+}
+
+.title-section {
+  font-size: clamp(1.8rem, 3.5vw, 2.75rem);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+  color: #ffffff;
+}
+
+.text-lead {
+  font-size: clamp(1.05rem, 1.5vw, 1.25rem);
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+
+.text-body {
+  font-size: 15px;
+  line-height: 1.65;
+  color: var(--text-muted);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #000000;
+}
+::-webkit-scrollbar-thumb {
+  background: #1c1c20;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #2e2e34;
+}
